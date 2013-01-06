@@ -2,12 +2,22 @@
 
 namespace test;
 
-// Examples, tentatively
+// Instantiate new test container. This should ideally be high-level and own more than one test
 $test = new Should("TestNameHere");
-$test->item($response)->should()->have()->a()->property("error");
-$test->item($response['error'])->should()->have()->a()->lengthOf(5);
-$test->item($response)->should()->have()->a()->property("body");
-$test->item($response['body'])->should()->have()->a()->lengthOf(3);
+
+// Run code to generate response
+$response = Model::init()->put("somewhere","something");
+
+// Run tests on the response
+$test->item($response)->should()->have()->property("error");
+$test->item($response['error'])->should()->have()->lengthOf(5);
+$test->item($response)->should()->have()->property("body");
+$test->item($response['body'])->should()->have()->lengthOf(3);
+
+// More tests here
+
+// Generate results in HTML
+$test->showResults();
 
 class Should {
 
@@ -30,12 +40,42 @@ class Should {
 		$this->_data = null;
 	}
 
+	public showResults() {
+		echo "<ul>";
+		foreach( $this->_results as $result ) {
+			echo "<li>" . $result['string'] . " :: " . $result['success'] . "</li>";
+		}
+		echo "</ul>";
+	}
+
 	protected function method( $method ) {
 		$this->_string .= " $method";
 	}
 
 	protected function negate() {
 		$this->_expectedFalse = true;
+	}
+
+	public function shouldBe() {
+		$this->method("should be");
+		return $this;
+	}
+
+	public function shouldNotBe() {
+		$this->method("should not be");
+		$this->negate();
+		return $this;
+	}
+
+	public function shouldHave() {
+		$this->method("should have");
+		return $this;
+	}
+
+	public function shouldNotHave() {
+		$this->method("should not have");
+		$this->negate();
+		return $this;
 	}
 
 	public function should() {
