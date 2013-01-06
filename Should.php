@@ -1,7 +1,6 @@
 <?php
 
-namespace test;
-
+/*
 // Instantiate new test container. This should ideally be high-level and own more than one test
 $test = new Should("TestNameHere");
 
@@ -18,6 +17,7 @@ $test->item($response['body'])->should()->have()->lengthOf(3);
 
 // Generate results in HTML
 $test->showResults();
+*/
 
 class Should {
 
